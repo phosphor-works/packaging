@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2026 fuddlesworth
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+/build/
+/build-*/
+/.cache/
+compile_commands.json
+
+# Claude Code: only settings.json is shared.
+/.claude/*
+!/.claude/settings.json
