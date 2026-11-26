@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 Phosphor Works Team
+# SPDX-License-Identifier: CC0-1.0
+#
+# The repositories whose package lists the CI images install: for each one,
+# .github/ci/arch-packages.txt and .github/ci/fedora-packages.txt on main,
+# where it has them. One repository on each line.
+phosphor-libs
+phosphor-engine-libs
+phosphor-shell-libs
+phosphor-components
+phosphor-bots
+PlasmaZones
+Lambent
+Afterglow
