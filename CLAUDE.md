@@ -32,12 +32,16 @@ Phase 0 of the Phosphor Split Plan moves them here.
 ### The plan
 
 1. Library recipes first: phosphor-libs, phosphor-engine-libs, phosphor-shell-libs, phosphor-components and
-   phosphor-surface-packs, each as its own package once each library repo has tags.
-2. Move PlasmaZones' release and rebuild-watch workflows here. The test: a PlasmaZones patch release published
-   entirely from this repository.
+   phosphor-surface-packs, each as its own package. Each library repo gets its own semver tags, starting at `v0.1.0`
+   (workspace#40). The recipes are workspace#41.
+2. Move PlasmaZones' release and rebuild-watch workflows and all of `PlasmaZones/packaging/` here, and delete them
+   from PlasmaZones in the same change (workspace#43). The test: PlasmaZones 3.6.0 published entirely from this
+   repository. The next PlasmaZones releases are 3.x. 4.0 is the release with the settings app changes.
 3. `graph.yml` names who depends on whom, and the watcher rebuilds the dependents of a library release, of a KWin
-   release and of each Qt minor release (the libraries use Qt private APIs).
-4. The CI images with the libraries installed, for the apps' pull request CI.
+   release and of each Qt minor release (the libraries use Qt private APIs) (workspace#44).
+4. The CI images with the libraries installed, for the apps' pull request CI (workspace#42).
+
+PlasmaZones moves onto the shared C++ CI in the same phase (workspace#45).
 
 ## Layout
 
@@ -52,7 +56,7 @@ There is no build, no CI and no checks yet.
 ### Rules for recipes
 
 - Every recipe repeats each pin of the repo it packages exactly: version, URL and SHA-256. A check here enforces
-  that, the way PlasmaZones' dep-pins rule does today.
+  that, including the archives of the phosphor-libs commit that a recipe bundles (workspace#46).
 - Formats: rpm (COPR), deb, Arch (a split PKGBUILD for the release, three `-git` PKGBUILDs) and Nix (an overlay).
 - The COPR package of PlasmaZones still clones `github.com/fuddlesworth/PlasmaZones`. Fix its clone URL in COPR's
   package settings when the recipes move here.
