@@ -1,0 +1,71 @@
+# Check the PlasmaZones recipes against PlasmaZones
+# SPDX-FileCopyrightText: 2026 Phosphor Works Team
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The recipes in plasmazones/ repeat facts of the PlasmaZones tree: each
+# archive pin of cmake/PlasmaZonesDependencies.cmake (and of the phosphor-libs
+# tree it pins), and the license and holders of each file (debian/copyright).
+# PlasmaZones' scripts/check-conventions.py holds them to it with its dep5,
+# dep-pins and recipe-prose rules, and PlasmaZones' CI runs them against this
+# repository. This workflow runs the same rules on a change here, so a recipe
+# that disagrees with PlasmaZones fails on either side.
+#
+# A change set has one branch name in each repository, so a pull request is
+# checked against the PlasmaZones branch of its own name when there is one,
+# and against main otherwise.
+
+name: PlasmaZones recipes
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plasmazones-recipes-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: Check the recipes against PlasmaZones
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the recipes
+        uses: actions/checkout@v7
+        with:
+          path: packaging
+
+      - name: Pick the PlasmaZones branch
+        id: pz-ref
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          ref=main
+          if [[ -n "${HEAD_REF:-}" ]] && git ls-remote --exit-code --heads https://github.com/phosphor-works/PlasmaZones "refs/heads/$HEAD_REF" >/dev/null; then
+              ref="$HEAD_REF"
+          fi
+          echo "Checking against phosphor-works/PlasmaZones at $ref"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+
+      - name: Check out PlasmaZones
+        uses: actions/checkout@v7
+        with:
+          repository: phosphor-works/PlasmaZones
+          ref: ${{ steps.pz-ref.outputs.ref }}
+          path: PlasmaZones
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      # A run with no file list checks the whole PlasmaZones tree, which is
+      # what dep5 needs: an edit to debian/copyright can break any file there.
+      - name: Check the recipes
+        env:
+          PLASMAZONES_PACKAGING_DIR: ${{ github.workspace }}/packaging
+        run: python3 PlasmaZones/scripts/check-conventions.py --rules dep5,dep-pins,recipe-prose

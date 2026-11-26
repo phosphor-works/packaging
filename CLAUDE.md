@@ -26,8 +26,8 @@ superbuild.
 
 ### State
 
-The repository has no files yet. PlasmaZones still releases from its own `release.yml` and `kwin-rebuild-watch.yml`.
-Phase 0 of the Phosphor Split Plan moves them here.
+PlasmaZones releases from here: its recipes are in `plasmazones/`, and its release and KWin rebuild-watch workflows
+are in `.github/workflows/` (workspace#43). The other apps do not release from here yet.
 
 ### The plan
 
@@ -36,8 +36,8 @@ libraries are 0.x with an unstable ABI and use Qt private APIs, so a separate li
 rebuild of every app on most library releases. Each library repo still has its own semver tags (workspace#40).
 Library packages come when a library reaches 1.0 or an outside consumer needs one.
 
-1. Move PlasmaZones' release and rebuild-watch workflows and all of `PlasmaZones/packaging/` here, and delete them
-   from PlasmaZones in the same change (workspace#43). The recipes keep bundling the pinned library archives. The
+1. Move PlasmaZones' release and rebuild-watch workflows and its release recipes here, and delete them from
+   PlasmaZones in the same change (workspace#43). The recipes keep bundling the pinned library archives. The
    test: PlasmaZones 3.6.0 published entirely from this repository. The next PlasmaZones releases are 3.x. 4.0 is
    the release with the settings app changes.
 2. `graph.yml` names who depends on whom, and the watcher rebuilds the dependents of a KWin release and of each Qt
@@ -48,23 +48,74 @@ PlasmaZones moves onto the shared C++ CI in the same phase (workspace#45).
 
 ## Layout
 
-There are no files yet, so there is no layout to describe.
+```
+plasmazones/                          — the recipes of PlasmaZones
+  arch/                               — PKGBUILD (AUR plasmazones), PKGBUILD.bin, PKGBUILD.git, the pacman hook
+  debian/                             — the Debian recipe, built in CI and on OBS
+  rpm/                                — plasmazones.spec, built in CI, on OBS and on COPR
+  obs/                                — the OBS source service and generate-dsc.sh
+  local-install/                      — install.sh and uninstall.sh of the release tarball, and web-install.sh
+  generate-changelog.sh               — the Debian and RPM changelogs and the release notes, from CHANGELOG.md
+.github/workflows/
+  plasmazones-release.yml             — builds and publishes a PlasmaZones tag
+  plasmazones-rebuild-watch.yml       — rebuilds the latest release when a distribution moves KWin
+  plasmazones-recipes.yml             — checks the recipes against PlasmaZones
+  cache-cleanup.yml                   — deletes the compiler caches no release run restores
+```
+
+The Nix recipe and modules of PlasmaZones stay in `PlasmaZones/nix/`, beside the flake that imports them. The COPR
+package builds from a webhook on PlasmaZones: its `.copr/Makefile` takes `plasmazones/rpm/plasmazones.spec` and
+`plasmazones/generate-changelog.sh` from this repository.
+
+### The release workflow
+
+| Trigger | What runs |
+| --- | --- |
+| `repository_dispatch` of type `plasmazones-release`, with `client_payload.tag` | The release of that tag. PlasmaZones' `release-dispatch.yml` sends it when a `v*` tag is pushed. |
+| `workflow_dispatch` with `tag` (and `pkgrel` for a mutable release) | The release of that tag, by hand or from the rebuild watch. |
+| `workflow_dispatch` with `warm_cache`, and the nightly schedule | Every package build from PlasmaZones' default branch, to keep the compiler caches fresh. Nothing is published. |
+
+Each job checks out PlasmaZones at the tag and copies `plasmazones/` of this repository to `packaging/` in that tree,
+so the recipes run with the same paths as in the source tree of the package. A dispatch from a tag push for a
+revision tag (`v<version>-r<N>`) is a no-op: the rebuild watch cuts that tag and starts the run that ships it.
+
+### Secrets
+
+| Repository | Secret | Access |
+| --- | --- | --- |
+| packaging | `PLASMAZONES_RELEASE_TOKEN` | Fine-grained token on phosphor-works/PlasmaZones with Contents and Workflows write. The release job makes the GitHub release with it, and the rebuild watch cuts revision tags with it. |
+| packaging | `AUR_SSH_PRIVATE_KEY` | The SSH key of the AUR account that maintains `plasmazones` and `plasmazones-bin`. |
+| packaging | `OBS_USERNAME`, `OBS_PASSWORD` | The build.opensuse.org account of `home:fuddlesworth`. |
+| PlasmaZones | `PACKAGING_DISPATCH_TOKEN` | Fine-grained token on phosphor-works/packaging with Contents write, which the dispatches endpoint needs. |
 
 ## Build and test
 
-There is no build, no CI and no checks yet.
+Nothing here builds on its own. The release workflow builds the packages in CI. To build one package by hand, copy
+`plasmazones/` to `packaging/` in a PlasmaZones checkout and run the steps of its job in `plasmazones-release.yml`.
+
+The checks of the recipes are PlasmaZones' `dep5`, `dep-pins` and `recipe-prose` rules. They read this checkout
+through `PLASMAZONES_PACKAGING_DIR`, or as `../packaging` beside a PlasmaZones checkout:
+
+```bash
+PLASMAZONES_PACKAGING_DIR=$PWD python3 ../PlasmaZones/scripts/check-conventions.py --rules dep5,dep-pins,recipe-prose
+```
+
+`plasmazones-recipes.yml` runs them on every pull request and push, against the PlasmaZones branch of the same name
+when there is one and against `main` otherwise. PlasmaZones' CI runs them against this repository the same way.
+`workspace/tools/sync --check` also checks each archive that a recipe bundles against the pins of the app.
+
+Do not run `plasmazones-release.yml` or `plasmazones-rebuild-watch.yml` to test a change: both publish. Use
+`warm_cache` to build every package and publish nothing, and `dry_run` of the rebuild watch to see what it would do.
 
 ## Rules
 
 ### Rules for recipes
 
-- Every recipe repeats each pin of the repo it packages exactly: version, URL and SHA-256. A check here enforces
-  that, including the archives of the phosphor-libs commit that a recipe bundles (workspace#46, in `tools/sync --check` of
-  the workspace until the recipes move here).
+- Every recipe repeats each pin of the repo it packages exactly: version, URL and SHA-256. `plasmazones-recipes.yml`
+  and `tools/sync --check` of the workspace enforce that, including the archives of the phosphor-libs commit that a
+  recipe bundles (workspace#46).
+- A recipe change that needs a change in the app (a pin bump, a new file in `debian/copyright`) is a change set: the
+  same branch name here and in the app.
 - Formats: rpm (COPR), deb, Arch (a split PKGBUILD for the release, three `-git` PKGBUILDs) and Nix (an overlay).
 - The COPR package of PlasmaZones still clones `github.com/fuddlesworth/PlasmaZones`. Fix its clone URL in COPR's
-  package settings when the recipes move here.
-
-### When files land
-
-Add the layout, the commands and the CI to this file.
+  package settings to `https://github.com/phosphor-works/PlasmaZones`.
