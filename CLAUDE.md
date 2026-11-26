@@ -43,6 +43,9 @@ Library packages come when a library reaches 1.0 or an outside consumer needs on
 2. `graph.yml` names who depends on whom, and the watcher rebuilds the dependents of a KWin release and of each Qt
    minor release (workspace#44). A library release reaches an app through a pin bump in the app.
 3. The CI images with the system dependencies installed, for the apps' pull request CI (workspace#42).
+4. After step 1, the distribution packages move to the openSUSE Build Service, one format at a time (workspace#54):
+   Fedora, openSUSE, Debian, Ubuntu and an Arch binary repository. OBS rebuilds a package when KWin or Qt changes
+   in its distribution, which replaces the rebuild watch. The AUR source package and the Nix flake stay as they are.
 
 PlasmaZones moves onto the shared C++ CI in the same phase (workspace#45).
 
