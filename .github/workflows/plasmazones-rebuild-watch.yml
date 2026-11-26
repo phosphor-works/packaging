@@ -283,7 +283,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       # The v<version>-r<N> tag is cut in PlasmaZones with the
-      # PLASMAZONES_RELEASE_TOKEN secret, not GITHUB_TOKEN (see the dispatch
+      # RELEASE_TAG_TOKEN secret, not GITHUB_TOKEN (see the dispatch
       # step), so no contents write.
       contents: read
       # workflow_dispatch of plasmazones-release.yml in this repository.
@@ -383,7 +383,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           # Only the tag creation uses this; see the comment there.
-          PLASMAZONES_RELEASE_TOKEN: ${{ secrets.PLASMAZONES_RELEASE_TOKEN }}
+          RELEASE_TAG_TOKEN: ${{ secrets.RELEASE_TAG_TOKEN }}
           # The releases and tags. The release workflow runs in this
           # repository, so its calls name $GITHUB_REPOSITORY.
           GH_REPO: phosphor-works/PlasmaZones
@@ -464,12 +464,12 @@ jobs:
               # which sends a repository_dispatch to plasmazones-release.yml.
               # That workflow's gate makes a repository_dispatch for a -r<N>
               # tag a no-op, and the dispatch below is the run that ships.
-              if [[ -z "${PLASMAZONES_RELEASE_TOKEN:-}" ]]; then
-                  echo "::error::The PLASMAZONES_RELEASE_TOKEN secret is not set. Cutting $NEXT_TAG needs a fine-grained PAT with Contents and Workflows write on $GH_REPO; GITHUB_TOKEN cannot write to another repository."
+              if [[ -z "${RELEASE_TAG_TOKEN:-}" ]]; then
+                  echo "::error::The RELEASE_TAG_TOKEN secret is not set. Cutting $NEXT_TAG needs a fine-grained PAT with Contents and Workflows write on $GH_REPO; GITHUB_TOKEN cannot write to another repository."
                   exit 1
               fi
               echo "Tagging $SHA as $NEXT_TAG in $GH_REPO"
-              GH_TOKEN="$PLASMAZONES_RELEASE_TOKEN" gh api -X POST "repos/$GH_REPO/git/refs" \
+              GH_TOKEN="$RELEASE_TAG_TOKEN" gh api -X POST "repos/$GH_REPO/git/refs" \
                   -f "ref=refs/tags/$NEXT_TAG" -f "sha=$SHA" >/dev/null
           fi
           echo "Dispatching plasmazones-release.yml for $NEXT_TAG (package revision $NEXT of $VERSION_TAG; KWin moved on: $MOVED)"

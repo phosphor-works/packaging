@@ -81,12 +81,16 @@ revision tag (`v<version>-r<N>`) is a no-op: the rebuild watch cuts that tag and
 
 ### Secrets
 
-| Repository | Secret | Access |
+The release secrets are organization secrets of phosphor-works, shared with the PlasmaZones and packaging
+repositories, so each value is set once. GitHub never shows a value again: set one from its source with
+`gh secret set <NAME> --org phosphor-works --repos PlasmaZones,packaging`.
+
+| Secret | Used by | Access |
 | --- | --- | --- |
-| packaging | `PLASMAZONES_RELEASE_TOKEN` | Fine-grained token on phosphor-works/PlasmaZones with Contents and Workflows write. The release job makes the GitHub release with it, and the rebuild watch cuts revision tags with it. |
-| packaging | `AUR_SSH_PRIVATE_KEY` | The SSH key of the AUR account that maintains `plasmazones` and `plasmazones-bin`. |
-| packaging | `OBS_USERNAME`, `OBS_PASSWORD` | The build.opensuse.org account of `home:fuddlesworth`. |
-| PlasmaZones | `PACKAGING_DISPATCH_TOKEN` | Fine-grained token on phosphor-works/packaging with Contents write, which the dispatches endpoint needs. |
+| `RELEASE_TAG_TOKEN` | packaging | Token on phosphor-works/PlasmaZones with Contents and Workflows write. The release job makes the GitHub release with it, and the rebuild watch cuts revision tags with it. |
+| `AUR_SSH_PRIVATE_KEY` | packaging | The private SSH key (not the `.pub` file) of the AUR account that maintains `plasmazones` and `plasmazones-bin`. |
+| `OBS_USERNAME`, `OBS_PASSWORD` | packaging | The build.opensuse.org account of `home:fuddlesworth`. |
+| `PACKAGING_DISPATCH_TOKEN` | PlasmaZones | Token on phosphor-works/packaging with Contents write, which the dispatches endpoint needs. |
 
 ## Build and test
 

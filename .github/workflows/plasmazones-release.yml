@@ -11,7 +11,7 @@
 #
 # The GitHub release is made on phosphor-works/PlasmaZones. The Actions token
 # of this repository cannot write there, so the release job uses the
-# PLASMAZONES_RELEASE_TOKEN secret.
+# RELEASE_TAG_TOKEN secret.
 
 name: PlasmaZones release
 
@@ -41,7 +41,7 @@ on:
         default: false
 
 # The Actions token stays read-only in every job. The release job writes to
-# PlasmaZones with PLASMAZONES_RELEASE_TOKEN, and publish-aur and publish-obs
+# PlasmaZones with RELEASE_TAG_TOKEN, and publish-aur and publish-obs
 # push over SSH with AUR_SSH_PRIVATE_KEY and to OBS with osc credentials, so
 # no job needs GITHUB_TOKEN writes. Do not add a write permission to the jobs
 # that push to third-party hosts.
@@ -65,7 +65,7 @@ jobs:
   # Refuse dispatches from the tag push for revision tags
   # ═══════════════════════════════════════════════════════════════════════════
   # A v<version>-r<N> tag is cut by plasmazones-rebuild-watch.yml with
-  # PLASMAZONES_RELEASE_TOKEN, and a tag that a token creates fires the tag-push
+  # RELEASE_TAG_TOKEN, and a tag that a token creates fires the tag-push
   # path of PlasmaZones (release-dispatch.yml), which sends a
   # repository_dispatch here. The watch dispatches this workflow for the tag
   # right after it cuts it, and that dispatch is the run that ships. So a
@@ -1554,7 +1554,7 @@ jobs:
     # tag. A cache-warming run never releases (and build-nix skips in one,
     # which this gate would read as not-succeeded anyway).
     # Only this job writes release assets to PlasmaZones, with
-    # PLASMAZONES_RELEASE_TOKEN. The Actions token stays read-only.
+    # RELEASE_TAG_TOKEN. The Actions token stays read-only.
     if: needs.version.outputs.warm != 'true'
 
     steps:
@@ -1766,7 +1766,7 @@ jobs:
         env:
           # A fine-grained token with Contents write on PlasmaZones. The
           # Actions token of this repository cannot write there.
-          GH_TOKEN: ${{ secrets.PLASMAZONES_RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TAG_TOKEN }}
           GH_REPO: phosphor-works/PlasmaZones
           IS_PRERELEASE: ${{ needs.version.outputs.is_prerelease }}
           RELEASE_TAG: ${{ needs.version.outputs.release_tag }}
@@ -1774,7 +1774,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "${GH_TOKEN:-}" ]]; then
-              echo "Error: the PLASMAZONES_RELEASE_TOKEN secret is not set, so no release can be made on $GH_REPO" >&2
+              echo "Error: the RELEASE_TAG_TOKEN secret is not set, so no release can be made on $GH_REPO" >&2
               exit 1
           fi
           # The release lives on the tag that was pushed or dispatched: the
