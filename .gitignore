@@ -1,5 +1,18 @@
 # SPDX-FileCopyrightText: 2026 Phosphor Works Team
 # SPDX-License-Identifier: CC0-1.0
 
+/build/
+/build-*/
+/.cache/
+compile_commands.json
+
+# Claude Code: only settings.json is shared.
+/.claude/*
+!/.claude/settings.json
+
+# Written by plasmazones/obs/generate-dsc.sh. The release workflow generates it
+# in the PlasmaZones tree, so a copy here is only a local leftover.
+/plasmazones/obs/plasmazones.dsc
+
 # Collected by .github/workflows/ci-images.yml for each build.
 images/*/packages.txt

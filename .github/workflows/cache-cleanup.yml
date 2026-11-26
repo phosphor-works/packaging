@@ -1,0 +1,60 @@
+# Delete the Actions caches no release run will restore again.
+# SPDX-FileCopyrightText: 2026 Phosphor Works Team
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The package builds of plasmazones-release.yml save a compiler cache on every
+# run, and the repository's caches share 10 GB, past which GitHub evicts the
+# least recently used: possibly the very entry the next release restores. The
+# script that PlasmaZones uses for its own caches
+# (scripts/trim-actions-caches.py) deletes the replaced entries, so the room
+# stays with the caches the builds read.
+
+name: Cache cleanup
+
+on:
+  # The entries a release or cache-warming run's new caches replaced.
+  workflow_run:
+    workflows: [PlasmaZones release]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: List what would be deleted, delete nothing
+        type: boolean
+        default: true
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+# One pass at a time, queued rather than cancelled: a pass waiting behind
+# another reads the listing afresh when it starts.
+concurrency:
+  group: cache-cleanup
+
+jobs:
+  trim:
+    name: Delete the caches no run restores
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the script
+        uses: actions/checkout@v7
+        with:
+          repository: phosphor-works/PlasmaZones
+          sparse-checkout: scripts/trim-actions-caches.py
+          sparse-checkout-cone-mode: false
+
+      - name: Delete them
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # The caches of this repository, not of the checkout above.
+          GH_REPO: ${{ github.repository }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          if [ "$DRY_RUN" = true ]; then
+            python3 scripts/trim-actions-caches.py --dry-run
+          else
+            python3 scripts/trim-actions-caches.py
+          fi
