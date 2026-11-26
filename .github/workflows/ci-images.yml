@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: 2026 Phosphor Works Team
+# SPDX-License-Identifier: CC0-1.0
+#
+# The CI images of the suite: ghcr.io/phosphor-works/ci-arch:latest and
+# ghcr.io/phosphor-works/ci-fedora:<version>. Each holds every package that a
+# C++ repository (images/repos.txt) lists in .github/ci/<distro>-packages.txt
+# on its main branch. The shared C++ CI of the workspace repository runs in
+# them when a repository sets `ci-images`, and still installs the repository's
+# own list, which finds nothing missing when the image is current.
+#
+# Rebuilt every week, so the images follow the rolling distributions, and when
+# the images change here. A run by hand rebuilds them after a repository adds
+# a package.
+
+name: CI images
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  push:
+    branches: [main]
+    paths: ["images/**", ".github/workflows/ci-images.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ci-images
+  cancel-in-progress: false
+
+env:
+  FEDORA_VERSION: "44"
+
+jobs:
+  image:
+    name: ${{ matrix.distro }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [arch, fedora]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Each repository's list on main. A repository with no list for this
+      # distribution adds nothing. Comments and blank lines are dropped, and
+      # each package appears once.
+      - name: Collect the package lists
+        shell: bash
+        env:
+          DISTRO: ${{ matrix.distro }}
+        run: |
+          set -euo pipefail
+          : > all.txt
+          while read -r repo; do
+            url="https://raw.githubusercontent.com/phosphor-works/$repo/main/.github/ci/$DISTRO-packages.txt"
+            if curl -fsSL "$url" -o list.txt; then
+              echo "$repo: $(sed -e 's/#.*//' -e '/^[[:space:]]*$/d' list.txt | wc -l) packages"
+              sed -e 's/#.*//' -e 's/[[:space:]]//g' -e '/^$/d' list.txt >> all.txt
+            else
+              echo "$repo: no $DISTRO list"
+            fi
+          done < <(sed -e 's/#.*//' -e 's/[[:space:]]//g' -e '/^$/d' images/repos.txt)
+          sort -u all.txt > "images/$DISTRO/packages.txt"
+          echo "In the image: $(wc -l < "images/$DISTRO/packages.txt") packages"
+
+      - name: Log in to the GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        shell: bash
+        env:
+          DISTRO: ${{ matrix.distro }}
+        run: |
+          set -euo pipefail
+          if [ "$DISTRO" = fedora ]; then
+            tag="ghcr.io/phosphor-works/ci-fedora:$FEDORA_VERSION"
+            docker build --build-arg "FEDORA_VERSION=$FEDORA_VERSION" -t "$tag" images/fedora
+          else
+            tag="ghcr.io/phosphor-works/ci-arch:latest"
+            docker build -t "$tag" images/arch
+          fi
+          docker push "$tag"
