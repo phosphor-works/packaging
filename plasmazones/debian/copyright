@@ -144,10 +144,26 @@ License: BSL-1.0 and MIT and Apache-2.0
 
 # The phosphor-libs commit PlasmaZones builds against, pinned in
 # cmake/PlasmaZonesDependencies.cmake. Its libraries are built from it and
-# installed with the package, and its schemas are compiled into them.
+# installed with the package, and its schemas are compiled into them. It also
+# vendors the Wayland protocols that phosphor-wayland compiles in, in
+# libs/phosphor-wayland/protocols: their XML carries MIT notices and, for the
+# wlroots and data-control protocols, HPND-sell-variant ones. The holders below
+# are theirs.
 Files: packaging/deps/phosphor-libs-*.tar.gz
 Copyright: 2026 Phosphor Works Team
-License: LGPL-2.1-or-later
+           2015 Martin Gräßlin
+           2015 Marco Martin
+           2015 Samsung Electronics Co., Ltd
+           2017 Drew DeVault
+           2018 Ilia Bozhinov
+           2018-2022 Simon Ser
+           2019 Ivan Molodetskikh
+           2020 Vlad Zahorodnii
+           2021 Isaac Freund
+           2023 David Redondo
+           2024 Neal Gompa
+           2024 Xaver Hugl
+License: LGPL-2.1-or-later and MIT and HPND-sell-variant
 
 # The suite's branding release, pinned beside them, which supplies the icons
 # the package installs. Artwork, not GPL.
@@ -213,6 +229,28 @@ License: MIT
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
+
+License: HPND-sell-variant
+ Permission to use, copy, modify, distribute, and sell this
+ software and its documentation for any purpose is hereby granted
+ without fee, provided that the above copyright notice appear in
+ all copies and that both that copyright notice and this permission
+ notice appear in supporting documentation, and that the name of
+ the copyright holders not be used in advertising or publicity
+ pertaining to distribution of the software without specific,
+ written prior permission.  The copyright holders make no
+ representations about the suitability of this software for any
+ purpose.  It is provided "as is" without express or implied
+ warranty.
+ .
+ THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
+ SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+ AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+ THIS SOFTWARE.
 
 License: BSL-1.0
  Permission is hereby granted, free of charge, to any person or organization

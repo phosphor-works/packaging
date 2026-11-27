@@ -12,7 +12,7 @@ pkgrel=1
 pkgdesc='Window snapping, tiling and scrolling for KDE Plasma'
 arch=('x86_64')
 url='https://github.com/phosphor-works/PlasmaZones'
-license=('GPL-3.0-or-later' 'LGPL-2.1-or-later')
+license=('GPL-3.0-or-later' 'LGPL-2.1-or-later' 'MIT' 'BSL-1.0' 'BSD-3-Clause' 'CC0-1.0' 'HPND-sell-variant')
 
 # KWin: minimum version, NOT an exact pin. The kwin-effect plugin's IID embeds
 # KWin's exact upstream version string and KWin refuses to load an effect whose

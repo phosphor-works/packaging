@@ -34,7 +34,13 @@ Summary:        Window snapping, tiling and scrolling for KDE Plasma
 # shared/surface_color.glsl (Source5), which is installed as source and declares
 # LGPL-2.1-or-later AND BSD-3-Clause. 0BSD is absent because the Arch
 # LICENSE file is not part of the source and is not installed.
-License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT AND BSL-1.0 AND BSD-3-Clause AND CC0-1.0
+#
+# HPND-sell-variant, and MIT again, come from the Wayland protocols that
+# phosphor-wayland compiles into libPhosphorWayland and its QPA plugin:
+# wayland-scanner generates their interface tables from the protocol XML, and
+# each XML carries its notice. The wlroots protocols and the data-control
+# protocols are HPND-sell-variant, the others MIT.
+License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT AND BSL-1.0 AND BSD-3-Clause AND CC0-1.0 AND HPND-sell-variant
 URL:            https://github.com/phosphor-works/PlasmaZones
 Source0:        %{url}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
