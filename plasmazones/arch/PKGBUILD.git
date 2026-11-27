@@ -144,7 +144,9 @@ package() {
     install -Dm644 "$pkgname/COPYING.LESSER" \
         "$pkgdir/usr/share/licenses/$pkgname/COPYING.LESSER"
 
-    # `cmake --install` above also installs every Phosphor component
-    # shared library plus its CMake config and headers; they ship
-    # bundled with the main package.
+    # `cmake --install` above also installs PlasmaZones' private copy of
+    # the Phosphor libraries and their layer-shell plugin in
+    # /usr/lib/phosphor-works/plasmazones, and the notices of the code they
+    # compile in, in /usr/share/licenses/plasmazones. It installs no headers,
+    # CMake packages or files in Qt's directories.
 }
