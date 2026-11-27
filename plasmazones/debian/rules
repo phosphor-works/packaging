@@ -26,30 +26,5 @@ override_dh_auto_configure:
 		-DBUILD_TESTING=OFF \
 		-DPHOSPHOR_DEPS_ARCHIVES=$(CURDIR)/packaging/deps
 
-override_dh_auto_install:
-	dh_auto_install
-	# Same strip as the RPM spec's %install, for the same reason: this is an
-	# end-user package, not a Phosphor SDK, and there is no -devel binary by
-	# design. Without it the .deb ships ~605 development files — the public
-	# headers, the CMake package configs and the unversioned .so devel
-	# symlinks — and lintian flags devel-file-in-non-devel-package and
-	# non-dev-pkg-with-shlib-symlink. Every Phosphor/plasmazones library sets
-	# SOVERSION, so the bare .so is always the devel symlink and never the
-	# runtime object.
-	rm -rf debian/plasmazones/usr/include/Phosphor*
-	rm -rf debian/plasmazones/usr/lib/*/cmake/Phosphor*
-	rm -f  debian/plasmazones/usr/lib/*/libPhosphor*.so
-	rm -f  debian/plasmazones/usr/lib/*/libplasmazones*.so
-	# PhosphorControlTest is ModuleTestHost, which a control module's CI links
-	# through the headers and CMake config removed above. Nothing in the
-	# package uses it.
-	rm -f  debian/plasmazones/usr/lib/*/libPhosphorControlTest.so.*
-	# phosphor-control-metadata is the build tool behind the control module CMake
-	# function, which goes with the CMake configs removed above. It is found
-	# by name because its libexec directory is up to the install layout, and
-	# the directories it leaves empty go too.
-	find debian/plasmazones -type f -name phosphor-control-metadata -delete
-	find debian/plasmazones -depth -type d -empty \( -path '*/libexec/phosphor' -o -path '*/libexec' \) -delete
-
 override_dh_auto_test:
 	# Skip tests during package build

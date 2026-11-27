@@ -31,10 +31,10 @@ are in `.github/workflows/` (workspace#43). The other apps do not release from h
 
 ### The plan
 
-The apps build the phosphor libraries statically into their own tree, from the commits that they pin. The
-libraries are 0.x with an unstable ABI and use Qt private APIs, so a separate library package would only add a
-rebuild of every app on most library releases. Each library repo still has its own semver tags (workspace#40).
-Library packages come when a library reaches 1.0 or an outside consumer needs one.
+Each app ships a private copy of the shared phosphor libraries that it uses, built from the commits that it pins, in
+`<libdir>/phosphor-works/<app>`. The libraries are 0.x with an unstable ABI and use Qt private APIs, so a separate
+library package would only add a rebuild of every app on most library releases. Each library repo still has its own
+semver tags (workspace#40). Library packages come when a library reaches 1.0 or an outside consumer needs one.
 
 1. Move PlasmaZones' release and rebuild-watch workflows and its release recipes here, and delete them from
    PlasmaZones in the same change (workspace#43). The recipes keep bundling the pinned library archives. The

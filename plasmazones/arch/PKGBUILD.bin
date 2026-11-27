@@ -57,9 +57,9 @@ sha256sums=('SKIP')
 install=plasmazones.install
 
 package() {
-    # Release tarball contains the full install prefix, including every
-    # Phosphor component shared library, the CMake configs, and the
-    # headers — a straight copy preserves them.
+    # The release tarball holds the whole install prefix, including the
+    # private copy of the Phosphor libraries in
+    # usr/lib/phosphor-works/plasmazones. A straight copy keeps it.
     cp -a "$srcdir/plasmazones-linux-x86_64/usr" "$pkgdir/usr"
 
     # License files — GPL-3.0-or-later (main) + LGPL-2.1-or-later (the

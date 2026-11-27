@@ -67,17 +67,17 @@ conflicts=('plasmazones-bin' 'plasmazones-git')
 # them.
 source=(
     "$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
-    "phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz::https://github.com/phosphor-works/phosphor-libs/archive/bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz"
+    "phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz::https://github.com/phosphor-works/phosphor-libs/archive/8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz"
     "luau-0.745.tar.gz::https://github.com/luau-lang/luau/archive/refs/tags/0.745.tar.gz"
     "jsoncons-1.10.0.tar.gz::https://github.com/danielaparker/jsoncons/archive/refs/tags/v1.10.0.tar.gz"
     "phosphor-branding-0.3.1.tar.gz::https://github.com/phosphor-works/branding/releases/download/v0.3.1/phosphor-branding-0.3.1.tar.gz"
     "phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz::https://github.com/phosphor-works/phosphor-surface-packs/archive/572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz"
-    "phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz::https://github.com/phosphor-works/phosphor-components/archive/0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz"
-    "phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz::https://github.com/phosphor-works/phosphor-engine-libs/archive/ab293743d925847d4e29573228a6b9a862c886fd.tar.gz"
+    "phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz::https://github.com/phosphor-works/phosphor-components/archive/d8c56b9842721747047cf0e5251c773677506e1a.tar.gz"
+    "phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz::https://github.com/phosphor-works/phosphor-engine-libs/archive/d20641bf6670da977eea9db47a103e70932d8b21.tar.gz"
     "kbuildsycoca.hook"
     "plasmazones-refresh-sycoca"
 )
-noextract=('phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz' 'luau-0.745.tar.gz' 'jsoncons-1.10.0.tar.gz' 'phosphor-branding-0.3.1.tar.gz' 'phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz' 'phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz' 'phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz')
+noextract=('phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz' 'luau-0.745.tar.gz' 'jsoncons-1.10.0.tar.gz' 'phosphor-branding-0.3.1.tar.gz' 'phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz' 'phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz' 'phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz')
 # The first entry is 'SKIP' so local `makepkg -p PKGBUILD` doesn't fail its
 # integrity check on the placeholder pkgver. plasmazones-release.yml templates the
 # real sha256 into that entry, and only that one, when publishing to AUR (see the
@@ -85,13 +85,13 @@ noextract=('phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz' 'luau
 # line with the release tarball's first: that rewrite relies on both.
 sha256sums=(
     'SKIP'
-    '195cf9dc8d49b7d425ad6e6ca6e8b09af21310940ff0d9aa442c145e735da7ca' # phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz
+    '986fde5e4895ff596e2e850a4f9113e8418bc97020b20222805b1ccda6706c47' # phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz
     '53c22773bace6cabbabaead576fbc08d11a0317fce11a3dbf9d027dda6849248' # luau-0.745.tar.gz
     'c829350a2eece662beb378143e2ab1c1cbb07d703687bf168626665a8a7d8bc1' # jsoncons-1.10.0.tar.gz
     'd6ec9261d4391148f5c21dfb02be410214d42ea675f1558a826042d63f495094' # phosphor-branding-0.3.1.tar.gz
     '2fb063f95503dcca9b23c2905213940f1f4aa8701623f1020c695335dd90475e' # phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz
-    '68a3f9e6e997dfce51d03544e310a5efad45fcfa40fbc73fa70f48cce44b8285' # phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz
-    '83d31714fd68de70c8dcabbf3db4559547b76d636748951322f87fd248e75a97' # phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz
+    'abab3716a68672eafa34c54d92701d6d3ad7b2a33f0ecc22304a8f26d6330571' # phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz
+    '5d348a5f7fb65387b1266c0ea9af32a8e4471defd78e70ad41065b5b2ab35333' # phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz
     'df64d66dffb8a711e4207cf0e297da3b6b586ddde10ab4f33dca00ede13fca0e' # kbuildsycoca.hook
     'd8066b6186c622bfc2e3f0ea59cc01a6c58869eab96219106a1b546b0664530e' # plasmazones-refresh-sycoca
 )
@@ -126,8 +126,9 @@ package() {
     install -Dm644 "PlasmaZones-$pkgver/COPYING.LESSER" \
         "$pkgdir/usr/share/licenses/$pkgname/COPYING.LESSER"
 
-    # `cmake --install` above also installs every Phosphor component
-    # shared library plus its CMake config and headers into /usr/lib
-    # and /usr/include. No separate -devel package is produced; they
-    # ship bundled with the main package.
+    # `cmake --install` above also installs PlasmaZones' private copy of
+    # the Phosphor libraries and their layer-shell plugin in
+    # /usr/lib/phosphor-works/plasmazones, and the notices of the code they
+    # compile in, in /usr/share/licenses/plasmazones. It installs no headers,
+    # CMake packages or files in Qt's directories.
 }

@@ -71,8 +71,8 @@ Source3:        https://github.com/phosphor-works/branding/releases/download/v0.
 # cmake/PlasmaZonesDependencies.cmake. Its libraries are built from it and
 # installed with the package. Luau and jsoncons above are the archives that
 # commit pins in its own cmake/PhosphorDependencies.cmake.
-# phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz sha256 195cf9dc8d49b7d425ad6e6ca6e8b09af21310940ff0d9aa442c145e735da7ca
-Source4:        https://github.com/phosphor-works/phosphor-libs/archive/bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz#/phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz
+# phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz sha256 986fde5e4895ff596e2e850a4f9113e8418bc97020b20222805b1ccda6706c47
+Source4:        https://github.com/phosphor-works/phosphor-libs/archive/8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz#/phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz
 # The surface decoration packs commit, pinned in the same file. Shader source
 # and metadata the build installs as data, so no bundled() provide.
 # phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz sha256 2fb063f95503dcca9b23c2905213940f1f4aa8701623f1020c695335dd90475e
@@ -80,13 +80,13 @@ Source5:        https://github.com/phosphor-works/phosphor-surface-packs/archive
 # The phosphor-components commit, pinned in the same file: the QML components
 # the overlays, settings app and editor draw with, built from it into the
 # executables, and its catalogs.
-# phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz sha256 68a3f9e6e997dfce51d03544e310a5efad45fcfa40fbc73fa70f48cce44b8285
-Source6:        https://github.com/phosphor-works/phosphor-components/archive/0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz#/phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz
+# phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz sha256 abab3716a68672eafa34c54d92701d6d3ad7b2a33f0ecc22304a8f26d6330571
+Source6:        https://github.com/phosphor-works/phosphor-components/archive/d8c56b9842721747047cf0e5251c773677506e1a.tar.gz#/phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz
 # The phosphor-engine-libs commit, pinned in the same file: the placement
 # engines, their models and the engine runtime, built from it on the
 # phosphor-libs tree above and installed with the package.
-# phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz sha256 83d31714fd68de70c8dcabbf3db4559547b76d636748951322f87fd248e75a97
-Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/ab293743d925847d4e29573228a6b9a862c886fd.tar.gz#/phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz
+# phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz sha256 5d348a5f7fb65387b1266c0ea9af32a8e4471defd78e70ad41065b5b2ab35333
+Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/d20641bf6670da977eea9db47a103e70932d8b21.tar.gz#/phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz
 Provides:       bundled(luau) = 0.745
 Provides:       bundled(jsoncons) = 1.10.0
 
@@ -300,32 +300,7 @@ Features:
 %install
 %cmake_install
 
-# This package ships PlasmaZones as an end-user application, not a
-# Phosphor SDK. Drop the development files the component libraries
-# install: public headers, CMake package configs, and the unversioned
-# .so devel symlinks. Only the versioned runtime libraries (.so.*) are
-# kept. Without this openSUSE's rpmlint fails the build on
-# devel-file-in-non-devel-package; there is no -devel subpackage by
-# design. Every Phosphor/plasmazones library sets SOVERSION, so the
-# bare .so is always a devel symlink and never the runtime object.
-rm -rf %{buildroot}%{_includedir}/Phosphor*
-rm -rf %{buildroot}%{_libdir}/cmake/Phosphor*
-rm -f  %{buildroot}%{_libdir}/libPhosphor*.so
-rm -f  %{buildroot}%{_libdir}/libplasmazones*.so
-# PhosphorControlTest is ModuleTestHost, which a control module's CI links
-# through the headers and CMake config removed above. Nothing in the
-# package uses it.
-rm -f  %{buildroot}%{_libdir}/libPhosphorControlTest.so.*
-# phosphor-control-metadata is the build tool behind the control module CMake
-# function, which goes with the CMake configs removed above. It is found by
-# name because its libexec directory differs between distributions, and the
-# directories it leaves empty go too.
-find %{buildroot} -type f -name phosphor-control-metadata -delete
-find %{buildroot} -depth -type d -empty \( -path '*/libexec/phosphor' -o -path '*/libexec' \) -delete
-
 %post
-# Register newly installed shared libraries with the dynamic linker.
-/sbin/ldconfig
 # Refresh KDE service cache
 /usr/bin/kbuildsycoca6 --noincremental 2>/dev/null || :
 # Update icon / desktop / MIME caches
@@ -343,7 +318,6 @@ echo ""
 %systemd_user_preun plasmazones.service
 
 %postun
-/sbin/ldconfig
 /usr/bin/kbuildsycoca6 --noincremental 2>/dev/null || :
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 /usr/bin/update-desktop-database -q %{_datadir}/applications &>/dev/null || :
@@ -353,17 +327,16 @@ echo ""
 %files
 %license LICENSE
 %license COPYING.LESSER
-# MIT licence of the bundled Luau runtime (Source1) and BSL-1.0 licence of
-# the bundled jsoncons headers (Source2), copied out of the unpacked archives
-# and installed by the phosphor-scripting / phosphor-fsloader CMake whenever it
-# builds them, rather than a system copy. The library tree installs them in
-# its own licence directory, not the app's.
-%license %{_datadir}/licenses/phosphor-libs/LICENSE.Luau
-%license %{_datadir}/licenses/phosphor-libs/LICENSE.jsoncons
-# The MIT and HPND-sell-variant notices of the Wayland protocols that
-# phosphor-wayland compiles into its library and QPA plugin, which it reads out
-# of the protocol XML and installs beside the two above.
-%license %{_datadir}/licenses/phosphor-libs/LICENSE.wayland-protocols
+# The notices of the code the Phosphor libraries compile in, which their
+# CMake installs into PlasmaZones' licence directory (PHOSPHOR_EMBED_APP): the
+# MIT licences of the bundled Luau runtime (Source1) and of Lua, from which it
+# derives, the BSL-1.0 licence of the bundled jsoncons headers (Source2), and
+# the MIT and HPND-sell-variant notices of the Wayland protocols that
+# phosphor-wayland compiles into its library and QPA plugin.
+%license %{_datadir}/licenses/%{name}/LICENSE.Luau
+%license %{_datadir}/licenses/%{name}/LICENSE.Lua
+%license %{_datadir}/licenses/%{name}/LICENSE.jsoncons
+%license %{_datadir}/licenses/%{name}/LICENSE.wayland-protocols
 %doc README.md
 
 # Executables — globbed by the plasmazones prefix (plasmazonesd plus
@@ -373,17 +346,14 @@ echo ""
 # and both default to OFF.
 %{_bindir}/plasmazones*
 
-# Component libraries — every Phosphor component library plus the
-# plasmazones core/rendering libs. Globbed by naming convention: this
-# is a single monolithic package, the build installs only this
-# project's files, so a new component library needs no spec edit.
-# Only the versioned runtime objects (.so.*) are shipped — the
-# unversioned .so devel symlinks, public headers and CMake package
-# configs are stripped in %%install (this is an end-user application,
-# not a Phosphor SDK, and there is no -devel subpackage by design).
-# Excludes the QML plugin under qt6/qml/, which the glob below owns.
-%{_libdir}/libPhosphor*.so.*
-%{_libdir}/libplasmazones*.so.*
+# PlasmaZones' private libraries: its own, its copy of the Phosphor libraries
+# at the commits it pins and their layer-shell QPA plugin, in its own
+# directory. The executables, the KWin effect and the KCM find them through
+# their run paths, so nothing is in the linker cache and no file is shared
+# with another package. The suite directory above it is shared by every
+# Phosphor app.
+%dir %{_libdir}/phosphor-works
+%{_libdir}/phosphor-works/%{name}/
 
 # KWin effect plugin. openSUSE: own the parent plugin directories so the
 # OBS "directories not owned by a package" check passes — no hard
@@ -395,14 +365,8 @@ echo ""
 %endif
 %{_libdir}/qt6/plugins/kwin/effects/plugins/kwin_effect_plasmazones.so
 
-# Layer-shell QPA plugin (PhosphorWayland)
-%{_libdir}/qt6/plugins/wayland-shell-integration/phosphorwayland-qpa.so
-
 # KCM sub-modules (System Settings)
 %{_libdir}/qt6/plugins/plasma/kcms/systemsettings/kcm_plasmazones_*.so
-
-# QML modules (PhosphorAnimation and any future org.phosphor module)
-%{_libdir}/qt6/qml/org/phosphor/
 
 # D-Bus interfaces
 %{_datadir}/dbus-1/interfaces/org.phosphor_works.*.xml
@@ -429,13 +393,12 @@ echo ""
 %endif
 %{_datadir}/systemsettings/categories/settings-windowmanagement-plasmazones.desktop
 
-# Runtime data — the Phosphor data trees the build installs:
-# phosphor-works/ (the shared layouts, algorithms, scrolling templates,
-# shader packs, curves and translations, the placement-host descriptors, the
-# surface decoration packs, and plasmazones/ for this app's own files),
-# phosphorwayland/ (protocol XMLs) and phosphor-libs/ (pluau.d.luau, the
-# tiling script type definitions).
-%{_datadir}/phosphor*/
+# Runtime data, in the suite folder phosphor-works/: the shared layouts,
+# algorithms, scrolling templates, shader packs, curves and translations, the
+# placement-host descriptors, the surface decoration packs, and plasmazones/
+# for this app's own files, the tiling script type definitions (pluau.d.luau)
+# included.
+%{_datadir}/phosphor-works/
 
 # Icons — the standard hicolor theme directories are owned by
 # hicolor-icon-theme (a hard Requires), so glob only our SVGs there.
