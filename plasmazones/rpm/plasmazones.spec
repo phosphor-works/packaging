@@ -71,8 +71,8 @@ Source3:        https://github.com/phosphor-works/branding/releases/download/v0.
 # cmake/PlasmaZonesDependencies.cmake. Its libraries are built from it and
 # installed with the package. Luau and jsoncons above are the archives that
 # commit pins in its own cmake/PhosphorDependencies.cmake.
-# phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz sha256 195cf9dc8d49b7d425ad6e6ca6e8b09af21310940ff0d9aa442c145e735da7ca
-Source4:        https://github.com/phosphor-works/phosphor-libs/archive/bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz#/phosphor-libs-bf8bf88bb24e29475b1b7adf0abefd7c7fbd05dd.tar.gz
+# phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz sha256 986fde5e4895ff596e2e850a4f9113e8418bc97020b20222805b1ccda6706c47
+Source4:        https://github.com/phosphor-works/phosphor-libs/archive/8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz#/phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz
 # The surface decoration packs commit, pinned in the same file. Shader source
 # and metadata the build installs as data, so no bundled() provide.
 # phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz sha256 2fb063f95503dcca9b23c2905213940f1f4aa8701623f1020c695335dd90475e
@@ -80,13 +80,13 @@ Source5:        https://github.com/phosphor-works/phosphor-surface-packs/archive
 # The phosphor-components commit, pinned in the same file: the QML components
 # the overlays, settings app and editor draw with, built from it into the
 # executables, and its catalogs.
-# phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz sha256 68a3f9e6e997dfce51d03544e310a5efad45fcfa40fbc73fa70f48cce44b8285
-Source6:        https://github.com/phosphor-works/phosphor-components/archive/0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz#/phosphor-components-0054f742fb5527475a51cc2f196e14dfd77d677d.tar.gz
+# phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz sha256 abab3716a68672eafa34c54d92701d6d3ad7b2a33f0ecc22304a8f26d6330571
+Source6:        https://github.com/phosphor-works/phosphor-components/archive/d8c56b9842721747047cf0e5251c773677506e1a.tar.gz#/phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz
 # The phosphor-engine-libs commit, pinned in the same file: the placement
 # engines, their models and the engine runtime, built from it on the
 # phosphor-libs tree above and installed with the package.
-# phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz sha256 83d31714fd68de70c8dcabbf3db4559547b76d636748951322f87fd248e75a97
-Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/ab293743d925847d4e29573228a6b9a862c886fd.tar.gz#/phosphor-engine-libs-ab293743d925847d4e29573228a6b9a862c886fd.tar.gz
+# phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz sha256 5d348a5f7fb65387b1266c0ea9af32a8e4471defd78e70ad41065b5b2ab35333
+Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/d20641bf6670da977eea9db47a103e70932d8b21.tar.gz#/phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz
 Provides:       bundled(luau) = 0.745
 Provides:       bundled(jsoncons) = 1.10.0
 
