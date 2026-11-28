@@ -76,11 +76,11 @@ source=(
     "phosphor-branding-0.3.1.tar.gz::https://github.com/phosphor-works/branding/releases/download/v0.3.1/phosphor-branding-0.3.1.tar.gz"
     "phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz::https://github.com/phosphor-works/phosphor-surface-packs/archive/572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz"
     "phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz::https://github.com/phosphor-works/phosphor-components/archive/d8c56b9842721747047cf0e5251c773677506e1a.tar.gz"
-    "phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz::https://github.com/phosphor-works/phosphor-engine-libs/archive/d20641bf6670da977eea9db47a103e70932d8b21.tar.gz"
+    "phosphor-engine-libs-5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz::https://github.com/phosphor-works/phosphor-engine-libs/archive/5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz"
     "kbuildsycoca.hook"
     "plasmazones-refresh-sycoca"
 )
-noextract=('phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz' 'luau-0.745.tar.gz' 'jsoncons-1.10.0.tar.gz' 'phosphor-branding-0.3.1.tar.gz' 'phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz' 'phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz' 'phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz')
+noextract=('phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz' 'luau-0.745.tar.gz' 'jsoncons-1.10.0.tar.gz' 'phosphor-branding-0.3.1.tar.gz' 'phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz' 'phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz' 'phosphor-engine-libs-5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz')
 sha256sums=(
     'SKIP'
     '986fde5e4895ff596e2e850a4f9113e8418bc97020b20222805b1ccda6706c47' # phosphor-libs-8373b436c6454b4d73e28c63bffcd0f87f059c2b.tar.gz
@@ -89,7 +89,7 @@ sha256sums=(
     'd6ec9261d4391148f5c21dfb02be410214d42ea675f1558a826042d63f495094' # phosphor-branding-0.3.1.tar.gz
     '2fb063f95503dcca9b23c2905213940f1f4aa8701623f1020c695335dd90475e' # phosphor-surface-packs-572e2240ef306d48650ed45ba6672af5ab31e75f.tar.gz
     'abab3716a68672eafa34c54d92701d6d3ad7b2a33f0ecc22304a8f26d6330571' # phosphor-components-d8c56b9842721747047cf0e5251c773677506e1a.tar.gz
-    '5d348a5f7fb65387b1266c0ea9af32a8e4471defd78e70ad41065b5b2ab35333' # phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz
+    '65b0f45a5e0138aaea9f2a829a0c10009dbff25d47960657e1cc782ed7707bb3' # phosphor-engine-libs-5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz
     'df64d66dffb8a711e4207cf0e297da3b6b586ddde10ab4f33dca00ede13fca0e' # kbuildsycoca.hook
     'd8066b6186c622bfc2e3f0ea59cc01a6c58869eab96219106a1b546b0664530e' # plasmazones-refresh-sycoca
 )
