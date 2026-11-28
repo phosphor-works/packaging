@@ -85,8 +85,8 @@ Source6:        https://github.com/phosphor-works/phosphor-components/archive/d8
 # The phosphor-engine-libs commit, pinned in the same file: the placement
 # engines, their models and the engine runtime, built from it on the
 # phosphor-libs tree above and installed with the package.
-# phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz sha256 5d348a5f7fb65387b1266c0ea9af32a8e4471defd78e70ad41065b5b2ab35333
-Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/d20641bf6670da977eea9db47a103e70932d8b21.tar.gz#/phosphor-engine-libs-d20641bf6670da977eea9db47a103e70932d8b21.tar.gz
+# phosphor-engine-libs-5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz sha256 65b0f45a5e0138aaea9f2a829a0c10009dbff25d47960657e1cc782ed7707bb3
+Source7:        https://github.com/phosphor-works/phosphor-engine-libs/archive/5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz#/phosphor-engine-libs-5b03c3349066968bab9c0777c2ff7f13c64e3b51.tar.gz
 Provides:       bundled(luau) = 0.745
 Provides:       bundled(jsoncons) = 1.10.0
 
